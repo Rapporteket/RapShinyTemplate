@@ -15,14 +15,16 @@ ui <- navbarPage(title = "RAPPORTEKET UI TEMPLATE", theme = "bootstrap.css",
     tabsetPanel(
       tabPanel("Report 1a",
         sidebarLayout(
-          sidebarPanel(uiOutput("sampleUcControl")),
-          mainPanel(plotOutput("distPlot"))
+          sidebarPanel(),
+          mainPanel(
+            textOutput("testSessionObj")
+          )
         )
       ),
       tabPanel("Report 1b",
         sidebarLayout(
-          sidebarPanel(),
-          mainPanel()
+          sidebarPanel(uiOutput("sampleUcControl")),
+          mainPanel(plotOutput("distPlot"))
         )
       )
     )
@@ -81,7 +83,12 @@ ui <- navbarPage(title = "RAPPORTEKET UI TEMPLATE", theme = "bootstrap.css",
 
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output, session) {
+  
+  output$testSessionObj <- renderText({
+    rapbase::getShinyUserName(session, testCase = TRUE)
+  })
+  
   output$sampleUcControl <- renderUI({
     selectInput(inputId = "sampleUc", label = "Sample user ctrl",
                 choices = c("How", "it", "will", "look"))
